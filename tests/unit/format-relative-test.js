@@ -59,7 +59,7 @@ test('should throw if called with out a value', function(assert) {
 
 test('can specify a `value` and `now` on the options hash', function(assert) {
     assert.expect(1);
-    view = this.intlBlock('{{format-relative 2000 now=0}}', { locale: 'en' });
+    view = this.intlBlock('{{format-relative 2000 now=0}}', { locale: 'en-us' });
     runAppend(view);
     assert.equal(view.$().text(), 'in 2 seconds');
 });
@@ -67,7 +67,7 @@ test('can specify a `value` and `now` on the options hash', function(assert) {
 test('should return relative time in hours, not best fit', function(assert) {
     assert.expect(1);
     var twoDays = (1000 * 60 * 60 * 24) * 2;
-    view = this.intlBlock(`{{format-relative ${twoDays} now=0 format="hours"}}`, { locale: 'en' });
+    view = this.intlBlock(`{{format-relative ${twoDays} now=0 format="hours"}}`, { locale: 'en-us' });
     runAppend(view);
     assert.equal(view.$().text(), 'in 48 hours');
 });
@@ -75,7 +75,7 @@ test('should return relative time in hours, not best fit', function(assert) {
 
 test('should return now', function(assert) {
     assert.expect(1);
-    view = this.intlBlock(`{{format-relative ${new Date().getTime()}}}`, { locale: 'en' });
+    view = this.intlBlock(`{{format-relative ${new Date().getTime()}}}`, { locale: 'en-us' });
     runAppend(view);
     assert.equal(view.$().text(), 'now');
 });

@@ -24,7 +24,7 @@ moduleFor('ember-intl@formatter:format-message', {
         this.container.register('helper:intl-get', intlGet);
         this.container.register('adapter:-intl-adapter', IntlAdapter.extend());
         this.container.register('application:main', Ember.Application.extend());
-        this.container.register('ember-intl@translation:en', Translation.extend({
+        this.container.register('ember-intl@translation:en-us', Translation.extend({
             foo: {
                 bar: 'foo bar baz',
                 baz: 'baz baz baz'
@@ -69,20 +69,20 @@ test('invoke formatMessage directly', function(assert) {
 
 test('message is formatted correctly with argument', function(assert) {
     assert.expect(1);
-    view = this.intlBlock('{{format-message "Hello {name}" name="Jason"}}', { locale: 'en' });
+    view = this.intlBlock('{{format-message "Hello {name}" name="Jason"}}', { locale: 'en-us' });
     runAppend(view);
     assert.equal(view.$().text(), "Hello Jason");
 });
 
 test('should throw if called with out a value', function(assert) {
     assert.expect(1);
-    view = this.intlBlock('{{format-message}}', { locale: 'en' });
+    view = this.intlBlock('{{format-message}}', { locale: 'en-us' });
     assert.throws(runAppend(view), Error, 'raised error when not value is passed to format-message');
 });
 
 test('should return a formatted string', function(assert) {
     assert.expect(1);
-    view = this.intlBlock('{{format-message MSG firstName=firstName lastName=lastName}}', {locale: 'en-US'});
+    view = this.intlBlock('{{format-message MSG firstName=firstName lastName=lastName}}', {locale: 'en-us'});
     view.set('context', {
         MSG      : 'Hi, my name is {firstName} {lastName}.',
         firstName: 'Anthony',
@@ -94,7 +94,7 @@ test('should return a formatted string', function(assert) {
 
 test('should return a formatted string with formatted numbers and dates', function(assert) {
     assert.expect(1);
-    view = this.intlBlock('{{format-message POP_MSG city=city population=population census_date=census_date timeZone=timeZone}}', {locale: 'en-US'});
+    view = this.intlBlock('{{format-message POP_MSG city=city population=population census_date=census_date timeZone=timeZone}}', {locale: 'en-us'});
     view.set('context', {
         POP_MSG    : '{city} has a population of {population, number, integer} as of {census_date, date, long}.',
         city       : 'Atlanta',
@@ -108,7 +108,7 @@ test('should return a formatted string with formatted numbers and dates', functi
 
 test('should return a formatted string with formatted numbers and dates in a different locale', function(assert) {
     assert.expect(1);
-    view = this.intlBlock('{{format-message POP_MSG city=city population=population census_date=census_date timeZone=timeZone}}', {locale: 'de-DE'});
+    view = this.intlBlock('{{format-message POP_MSG city=city population=population census_date=census_date timeZone=timeZone}}', {locale: 'de-de'});
     view.set('context', {
         POP_MSG    : '{city} hat eine Bevölkerung von {population, number, integer} zum {census_date, date, long}.',
         city       : 'Atlanta',
@@ -122,7 +122,7 @@ test('should return a formatted string with formatted numbers and dates in a dif
 
 test('should return a formatted string with an `each` block', function(assert) {
     assert.expect(1);
-    view = this.intlBlock('{{#each harvest in harvests}} {{format-message HARVEST_MSG person=harvest.person count=harvest.count }}{{/each}}', { locale: 'en' });
+    view = this.intlBlock('{{#each harvest in harvests}} {{format-message HARVEST_MSG person=harvest.person count=harvest.count }}{{/each}}', { locale: 'en-us' });
     view.set('context', {
         HARVEST_MSG : '{person} harvested {count, plural, one {# apple} other {# apples}}.',
         harvests    : [
@@ -136,23 +136,23 @@ test('should return a formatted string with an `each` block', function(assert) {
 
 test('intl-get returns message and format-message renders', function(assert) {
     assert.expect(1);
-    view = this.intlBlock('{{format-message (intl-get "foo.bar")}}', { locale: 'en' });
+    view = this.intlBlock('{{format-message (intl-get "foo.bar")}}', { locale: 'en-us' });
     runAppend(view);
     assert.equal(view.$().text(), "foo bar baz");
 });
 
 test('locale can add message and intl-get can read it', function(assert) {
     assert.expect(1);
-    var translation = this.container.lookup('ember-intl@translation:en');
+    var translation = this.container.lookup('ember-intl@translation:en-us');
     translation.addMessage('adding', 'this works also');
-    view = this.intlBlock('{{format-message (intl-get "adding")}}', { locale: 'en' });
+    view = this.intlBlock('{{format-message (intl-get "adding")}}', { locale: 'en-us' });
     runAppend(view);
     assert.equal(view.$().text(), "this works also");
 });
 
 test('intl-get handles bound computed property', function(assert) {
     assert.expect(3);
-    view = this.intlBlock('{{format-message (intl-get computedMessage)}}', { locale: 'en' });
+    view = this.intlBlock('{{format-message (intl-get computedMessage)}}', { locale: 'en-us' });
     var context = Ember.Object.extend({
         foo: true,
         computedMessage: computed('foo', function () {
@@ -178,8 +178,8 @@ test('locale can add message to intl service and read it', function(assert) {
     var self = this;
     Ember.run(this, function () {
         var service = self.container.lookup('service:intl');
-        service.addMessage('en', 'oh', 'hai!').then(function () {
-            view = self.intlBlock('{{format-message (intl-get "oh")}}', { locale: 'en' });
+        service.addMessage('en-us', 'oh', 'hai!').then(function () {
+            view = self.intlBlock('{{format-message (intl-get "oh")}}', { locale: 'en-us' });
             runAppend(view);
             assert.equal(view.$().text(), "hai!");
         });
@@ -189,19 +189,19 @@ test('locale can add message to intl service and read it', function(assert) {
 test('locale can add messages object and intl-get can read it', function(assert) {
     assert.expect(1);
 
-    var translation = this.container.lookup('ember-intl@translation:en');
+    var translation = this.container.lookup('ember-intl@translation:en-us');
     translation.addMessages({
         'bulk-add': 'bulk add works'
     });
 
-    view = this.intlBlock('{{format-message (intl-get "bulk-add")}}', { locale: 'en' });
+    view = this.intlBlock('{{format-message (intl-get "bulk-add")}}', { locale: 'en-us' });
     runAppend(view);
     assert.equal(view.$().text(), "bulk add works");
 });
 
 test('should respect format options for date ICU block', function(assert) {
     assert.expect(1);
-    view = this.intlBlock('{{format-message "Sale begins {day, date, shortWeekDay}" day=1390518044403}}', { locale: 'en' });
+    view = this.intlBlock('{{format-message "Sale begins {day, date, shortWeekDay}" day=1390518044403}}', { locale: 'en-us' });
     runAppend(view);
     assert.equal(view.$().text(), "Sale begins January 23, 2014");
 });
@@ -209,7 +209,7 @@ test('should respect format options for date ICU block', function(assert) {
 test('intl-get returns message for key that is a literal string (not an object path)', function(assert) {
     assert.expect(1);
 
-    var translation = this.container.lookup('ember-intl@translation:en');
+    var translation = this.container.lookup('ember-intl@translation:en-us');
     var fn = translation.getValue;
 
     translation.getValue = function (key) {
@@ -219,7 +219,7 @@ test('intl-get returns message for key that is a literal string (not an object p
     translation['string.path.works'] = 'yes it does';
 
     try {
-      view = this.intlBlock('{{format-message (intl-get "string.path.works")}}', {locale: 'en'});
+      view = this.intlBlock('{{format-message (intl-get "string.path.works")}}', {locale: 'en-us'});
       runAppend(view);
       assert.equal(view.$().text(), "yes it does");
     } catch(ex) {

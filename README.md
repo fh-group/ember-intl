@@ -27,7 +27,17 @@ service, and helpers, provide a way to format dates, numbers, strings messages, 
 * If you are targeting a browser that doesn't support the native Intl API (such as Safari or PhantomJS), you need to load the shim.  The [Intl.JS polyfill](https://github.com/andyearnshaw/Intl.js/) is automatically added into your asset distribution folder, so you need to add the following to your index.html:
 
 ```html
-<script src="/assets/intl/Intl.complete.js"></script>
+<script src="/assets/intl/intl.min.js"></script>
+<script src="/assets/intl/locales/en-us.js"></script>
+<script src="/assets/intl/locales/fr-fr.js"></script>
+<script src="/assets/intl/locales/es-es.js"></script>
+<!--
+You can view the full list of CLDR locales which can be accessed from the `/assets/intl` folder
+of your application.  The CLDRs are automatically placed there at build time.  Typically this folder
+on your filesystem is ``<project>/dist/assets/intl`
+
+Full list: https://github.com/yahoo/formatjs-extract-cldr-data/tree/master/data/main
+-->
 ```
 
 Translations are defined in `/translations`, *outside of `app`* in either JSON or YAML format.  Example of `/translations/en-us.yaml`:
@@ -54,7 +64,7 @@ product:
       // which locale the user should be targeted and perhaps lazily
       // load translations using XHR and calling intl's `addMessage`/`addMessages`
       // method with the results of the XHR request
-      Ember.set(this, 'intl.locale', 'en-US');
+      Ember.set(this, 'intl.locale', 'en-us');
     }
   });
 ```

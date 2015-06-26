@@ -3,7 +3,7 @@ import computed from 'ember-new-computed';
 
 export default Ember.Controller.extend({
     intl:    Ember.inject.service(),
-    locales: Ember.A(['en-US', 'fr-FR', 'es']),
+    locales: Ember.A(['en-us', 'fr-fr', 'es-es']),
 
     actions: {
         changeLocale(localeName) {

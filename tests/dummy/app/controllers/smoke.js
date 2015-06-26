@@ -6,7 +6,7 @@ var yesterday  = new Date(now).setDate(now.getDate() - 1);
 
 export default Ember.Controller.extend({
   intl:       Ember.inject.service(),
-  locales:    ['en-US', 'fr-FR', 'es'],
+  locales:    Ember.A(['en-us', 'fr-fr', 'es-es']),
   num:        1000,
   yesterday:  yesterday,
 
